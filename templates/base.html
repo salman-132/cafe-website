@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %} | Focus Café</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="nav {% block nav_class %}{% endblock %}">
+        <a class="brand" href="{{ url_for('menu') }}">Focus Café</a>
+        <ul>
+            <li>
+                <a href="{{ url_for('menu') }}" {% if request.endpoint == 'menu' %}aria-current="page"{% endif %}>
+                    Menu <span class="ar" lang="ar" dir="rtl">القائمة</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('reserve') }}" {% if request.endpoint == 'reserve' %}aria-current="page"{% endif %}>
+                    Reserve a Table <span class="ar" lang="ar" dir="rtl">حجز طاولة</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('study') }}" {% if request.endpoint == 'study' %}aria-current="page"{% endif %}>
+                    Study Table <span class="ar" lang="ar" dir="rtl">طاولة دراسة</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('owner') }}" {% if request.endpoint in ['owner', 'owner_login'] %}aria-current="page"{% endif %}>
+                    Owner <span class="ar" lang="ar" dir="rtl">المالك</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <main class="paper {% block main_class %}{% endblock %}">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+            <p class="flash flash-{{ category }}" role="status">{{ message }}</p>
+            {% endfor %}
+        {% endwith %}
+
+        {% if errors %}
+        <div class="errors" role="alert">
+            <p>Please fix these before sending:</p>
+            <ul>
+                {% for error in errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

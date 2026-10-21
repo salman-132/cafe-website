@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Reserve a Table{% endblock %}
+
+{% block content %}
+<header class="page-header">
+    <h1>Reserve a Table</h1>
+    <p class="ar" lang="ar" dir="rtl">حجز طاولة</p>
+    <p class="tagline">Send a request and the café will confirm it.</p>
+</header>
+
+<form method="post" class="form">
+    <label class="field">
+        <span class="label">Name <span class="ar" lang="ar" dir="rtl">الاسم</span></span>
+        <input type="text" name="customer_name" value="{{ form.get('customer_name', '') }}" required>
+    </label>
+
+    <label class="field">
+        <span class="label">Phone <span class="ar" lang="ar" dir="rtl">رقم الهاتف</span></span>
+        <input type="tel" name="phone" value="{{ form.get('phone', '') }}" required>
+    </label>
+
+    <div class="row">
+        <label class="field">
+            <span class="label">Date <span class="ar" lang="ar" dir="rtl">التاريخ</span></span>
+            <input type="date" name="date" value="{{ form.get('date', '') }}" required>
+        </label>
+
+        <label class="field">
+            <span class="label">Time <span class="ar" lang="ar" dir="rtl">الوقت</span></span>
+            <input type="time" name="time" value="{{ form.get('time', '') }}" required>
+        </label>
+    </div>
+
+    <label class="field">
+        <span class="label">Number of people <span class="ar" lang="ar" dir="rtl">عدد الأشخاص</span></span>
+        <input type="number" name="people_count" min="1" step="1" value="{{ form.get('people_count', '') }}" required>
+    </label>
+
+    <label class="field">
+        <span class="label">Notes (optional) <span class="ar" lang="ar" dir="rtl">ملاحظات</span></span>
+        <textarea name="notes" rows="3">{{ form.get('notes', '') }}</textarea>
+    </label>
+
+    <button type="submit">Send reservation</button>
+</form>
+{% endblock %}

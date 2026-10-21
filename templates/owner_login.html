@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Owner login{% endblock %}
+
+{% block content %}
+<header class="page-header">
+    <h1>Owner login</h1>
+    <p class="ar" lang="ar" dir="rtl">دخول المالك</p>
+</header>
+
+<form method="post" class="form form-narrow">
+    <label class="field">
+        <span class="label">Password <span class="ar" lang="ar" dir="rtl">كلمة المرور</span></span>
+        <input type="password" name="password" required autofocus>
+    </label>
+
+    <button type="submit">Log in</button>
+</form>
+{% endblock %}

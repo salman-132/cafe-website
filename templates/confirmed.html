@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Request sent{% endblock %}
+
+{% block content %}
+<div class="confirm">
+    {% if kind == 'study' %}
+        <h1>Study table requested</h1>
+        <p class="ar" lang="ar" dir="rtl">تم إرسال طلب حجز طاولة الدراسة</p>
+    {% else %}
+        <h1>Reservation requested</h1>
+        <p class="ar" lang="ar" dir="rtl">تم إرسال طلب الحجز</p>
+    {% endif %}
+
+    <p>Your request is pending. The café will review it and contact you by phone.</p>
+    <a class="button-link" href="{{ url_for('menu') }}">Back to menu</a>
+</div>
+{% endblock %}

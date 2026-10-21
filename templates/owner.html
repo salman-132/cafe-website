@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block title %}Owner{% endblock %}
+{% block nav_class %}nav-wide{% endblock %}
+{% block main_class %}paper-wide{% endblock %}
+
+{% block content %}
+<header class="page-header">
+    <h1>Bookings</h1>
+    <p class="ar" lang="ar" dir="rtl">الحجوزات</p>
+    <a class="text-link" href="{{ url_for('owner_logout') }}">Log out</a>
+</header>
+
+<!-- ========== Normal table reservations ========== -->
+<section class="category">
+    <h2>
+        <span>Table reservations</span>
+        <span class="ar" lang="ar" dir="rtl">حجوزات الطاولات</span>
+    </h2>
+
+    {% if reservations %}
+    <ul>
+        {% for r in reservations %}
+        <li class="booking">
+            <div class="booking-top">
+                <span class="booking-name">#{{ r.id }} {{ r.customer_name }}</span>
+                <span class="status status-{{ r.status }}">{{ r.status }}</span>
+            </div>
+            <p class="booking-info">
+                {{ r.date }} at {{ r.time }}, {{ r.people_count }} people, phone {{ r.phone }}
+            </p>
+            {% if r.notes %}
+            <p class="booking-info">Notes: {{ r.notes }}</p>
+            {% endif %}
+
+            {% if r.status == 'pending' %}
+            <div class="actions">
+                <form method="post" action="{{ url_for('update_reservation', res_id=r.id, action='accept') }}">
+                    <button type="submit">Accept</button>
+                </form>
+                <form method="post" action="{{ url_for('update_reservation', res_id=r.id, action='reject') }}">
+                    <button type="submit" class="button-secondary">Reject</button>
+                </form>
+            </div>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="empty">No table reservations yet.</p>
+    {% endif %}
+</section>
+
+<!-- ========== Study sessions ========== -->
+<section class="category">
+    <h2>
+        <span>Study sessions</span>
+        <span class="ar" lang="ar" dir="rtl">جلسات الدراسة</span>
+    </h2>
+
+    {% if study_sessions %}
+    <ul>
+        {% for s in study_sessions %}
+        <li class="booking">
+            <div class="booking-top">
+                <span class="booking-name">#{{ s.id }} {{ s.customer_name }}</span>
+                <span class="status status-{{ s.status }}">{{ s.status }}</span>
+            </div>
+            <p class="booking-info">
+                Table {{ s.table_number }}, {{ s.date }} at {{ s.start_time }},
+                {{ s.planned_hours | num }} hours planned, phone {{ s.phone }}
+            </p>
+            <p class="booking-goal">Goal: {{ s.goal }}</p>
+
+            {% if s.status == 'pending' %}
+            <div class="actions">
+                <form method="post" action="{{ url_for('update_study', study_id=s.id, action='accept') }}">
+                    <button type="submit">Accept</button>
+                </form>
+                <form method="post" action="{{ url_for('update_study', study_id=s.id, action='reject') }}">
+                    <button type="submit" class="button-secondary">Reject</button>
+                </form>
+            </div>
+
+            {% elif s.status == 'accepted' %}
+            <form method="post" action="{{ url_for('finish_study', study_id=s.id) }}" class="finish-form">
+                <label class="field">
+                    <span class="label">Actual hours</span>
+                    <input type="number" name="actual_hours" min="0.25" step="0.25" required>
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" name="goal_completed" value="1">
+                    Goal completed
+                </label>
+                <button type="submit">End session</button>
+            </form>
+
+            {% elif s.status == 'finished' %}
+            <div class="bill">
+                <p class="booking-info">
+                    Actual hours: {{ s.actual_hours | num }},
+                    goal completed: {{ 'yes' if s.goal_completed else 'no' }}
+                </p>
+                <div class="item-line">
+                    <span>Booking fee</span>
+                    <span class="dots"></span>
+                    <span>{{ s.booking_fee | bhd }}</span>
+                </div>
+                <div class="item-line">
+                    <span>Penalty</span>
+                    <span class="dots"></span>
+                    <span>{{ s.penalty | bhd }}</span>
+                </div>
+                <div class="item-line bill-total">
+                    <span>Total</span>
+                    <span class="dots"></span>
+                    <span>{{ s.total | bhd }}</span>
+                </div>
+            </div>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="empty">No study sessions yet.</p>
+    {% endif %}
+</section>
+{% endblock %}

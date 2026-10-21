@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Study Table{% endblock %}
+
+{% block content %}
+<header class="page-header">
+    <h1>Book a Study Table</h1>
+    <p class="ar" lang="ar" dir="rtl">حجز طاولة دراسة</p>
+    <p class="tagline">Pick a table, set one clear goal, and get it done.</p>
+</header>
+
+{% if tables %}
+<form method="post" class="form">
+    <fieldset class="field">
+        <legend class="label">Choose a table <span class="ar" lang="ar" dir="rtl">اختر الطاولة</span></legend>
+        {% for table in tables %}
+        <label class="table-option">
+            <input type="radio" name="table_id" value="{{ table.id }}" required
+                   {% if form.get('table_id') == table.id|string %}checked{% endif %}>
+            <span>Table {{ table.table_number }} ({{ table.seats }} seats)</span>
+            <span class="dots"></span>
+            <span class="item-price">{{ table.booking_fee | bhd }}</span>
+        </label>
+        {% endfor %}
+    </fieldset>
+
+    <label class="field">
+        <span class="label">Name <span class="ar" lang="ar" dir="rtl">الاسم</span></span>
+        <input type="text" name="customer_name" value="{{ form.get('customer_name', '') }}" required>
+    </label>
+
+    <label class="field">
+        <span class="label">Phone <span class="ar" lang="ar" dir="rtl">رقم الهاتف</span></span>
+        <input type="tel" name="phone" value="{{ form.get('phone', '') }}" required>
+    </label>
+
+    <div class="row">
+        <label class="field">
+            <span class="label">Date <span class="ar" lang="ar" dir="rtl">التاريخ</span></span>
+            <input type="date" name="date" value="{{ form.get('date', '') }}" required>
+        </label>
+
+        <label class="field">
+            <span class="label">Start time <span class="ar" lang="ar" dir="rtl">وقت البدء</span></span>
+            <input type="time" name="start_time" value="{{ form.get('start_time', '') }}" required>
+        </label>
+    </div>
+
+    <label class="field">
+        <span class="label">Your goal <span class="ar" lang="ar" dir="rtl">هدفك</span></span>
+        <input type="text" name="goal" placeholder="Example: finish chapter 3" value="{{ form.get('goal', '') }}" required>
+    </label>
+
+    <label class="field">
+        <span class="label">Planned hours <span class="ar" lang="ar" dir="rtl">عدد الساعات</span></span>
+        <input type="number" name="planned_hours" min="0.5" step="0.5" value="{{ form.get('planned_hours', '') }}" required>
+    </label>
+
+    <p class="note">If you don't complete your goal and stay longer than planned, you pay 1.000 BHD for each extra hour.</p>
+
+    <button type="submit">Book study table</button>
+</form>
+{% else %}
+<p class="empty">No study tables are available right now. Please check again later.</p>
+{% endif %}
+{% endblock %}

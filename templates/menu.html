@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Menu{% endblock %}
+
+{% block content %}
+<header class="page-header">
+    <h1>Focus Café</h1>
+    <p class="ar" lang="ar" dir="rtl">مقهى التركيز</p>
+    <p class="tagline">Good coffee, quiet tables, real progress.</p>
+</header>
+
+{% if sections %}
+    {% for section in sections %}
+    <section class="category">
+        <h2>
+            <span>{{ section.en }}</span>
+            {% if section.ar %}<span class="ar" lang="ar" dir="rtl">{{ section.ar }}</span>{% endif %}
+        </h2>
+
+        <ul>
+            {% for item in section["items"] %}
+            <li class="item">
+                <div class="item-line">
+                    <span class="item-name">{{ item.name }}</span>
+                    <span class="dots"></span>
+                    <span class="item-price">{{ item.price | bhd }}</span>
+                </div>
+                {% if item.description %}
+                <p class="item-desc">{{ item.description }}</p>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endfor %}
+{% else %}
+    <p class="empty">The menu is empty. Add items to the menu_items table, then refresh this page.</p>
+{% endif %}
+
+<footer class="page-footer">
+    <p>Prices in Bahraini Dinar</p>
+    <p class="ar" lang="ar" dir="rtl">الأسعار بالدينار البحريني</p>
+</footer>
+{% endblock %}
